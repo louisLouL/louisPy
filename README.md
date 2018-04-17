@@ -21,7 +21,7 @@ cache = Cache(redis)
 #### Example1 : Cache string return
 
 ```python
-#set cache's time to live to 300 seconds
+# set cache's time to live to 300 seconds (expires in 300 seconds)
 @cache.ttl(300)
 def pseudo_calc():
     sleep(1)
@@ -34,7 +34,9 @@ for i in range(10):
 ```
 #### Example 2: Cache Pandas Dataframe
 ```python
-@cache.df(12)
+# Set cache's time to live to 300 seconds (expires in 300 seconds)
+# If left blank, e.g. @cache.df(), cache will stay forever. Don't recommended.
+@cache.df(300)
 def return_a_df(*args, **kwargs):
     sleep(1)
     print("Computation in progress")
