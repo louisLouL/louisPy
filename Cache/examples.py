@@ -8,13 +8,13 @@ from Cache import Cache
 ### Comment this section if you don't have redis instance ###
 redis = StrictRedis(decode_responses=True)
 cache = Cache(redis)
-cache = Cache()
 
 #############################################################
 
 ###### Comment this section if you are using redis ##########
 # cache = Cache()
 #############################################################
+
 # Example: cache string return
 
 @cache.ttl(300)
