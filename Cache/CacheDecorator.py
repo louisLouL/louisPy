@@ -21,8 +21,8 @@ class Cache:
     def ttl(self, ttl=None):
         def enable(func):
             def func_wrapper(*args, **kwargs):
-                target_key = ":".join(["CACHE", func.__name__, *[str(i) for i in args], str(kwargs)])
-                target_key = hash(target_key)
+                target_key = ":".join(
+                    ["Cache", str(hash(":".join([func.__name__, *[str(i) for i in args], str(kwargs)])))])
                 a = self.cache_container.get(target_key)
                 if a:
                     return a
@@ -37,15 +37,19 @@ class Cache:
 
     def ser_df(self, func):
         name = func.__name__
+
         def func_wrapper(*args, **kwargs):
             return func(*args, **kwargs).to_csv(index=False)
+
         func_wrapper.__name__ = name
         return func_wrapper
 
     def de_ser_df(self, func):
         name = func.__name__
+
         def func_wrapper(*args, **kwargs):
             return pd.read_csv(StringIO(func(*args, **kwargs)))
+
         func_wrapper.__name__ = name
         return func_wrapper
 
@@ -59,22 +63,28 @@ class Cache:
 
     def ser_number(self, func):
         name = func.__name__
+
         def func_wrapper(*args, **kwargs):
             return str(func(*args, **kwargs))
+
         func_wrapper.__name__ = name
         return func_wrapper
 
     def de_ser_int(self, func):
         name = func.__name__
+
         def func_wrapper(*args, **kwargs):
             return int(func(*args, **kwargs))
+
         func_wrapper.__name__ = name
         return func_wrapper
 
     def de_ser_float(self, func):
         name = func.__name__
+
         def func_wrapper(*args, **kwargs):
             return float(func(*args, **kwargs))
+
         func_wrapper.__name__ = name
         return func_wrapper
 
@@ -96,15 +106,19 @@ class Cache:
 
     def ser_dict(self, func):
         name = func.__name__
+
         def func_wrapper(*args, **kwargs):
             return json.dumps(func(*args, **kwargs))
+
         func_wrapper.__name__ = name
         return func_wrapper
 
     def de_ser_dict(self, func):
         name = func.__name__
+
         def func_wrapper(*args, **kwargs):
             return json.loads(func(*args, **kwargs))
+
         func_wrapper.__name__ = name
         return func_wrapper
 
