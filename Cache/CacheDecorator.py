@@ -22,7 +22,7 @@ class Cache:
         def enable(func):
             def func_wrapper(*args, **kwargs):
                 target_key = ":".join(
-                    ["Cache", str(hash(":".join([func.__name__, *[str(i) for i in args], str(kwargs)])))])
+                    ["Cache", str(":".join([func.__name__, *[str(i) for i in args], str(kwargs)]))])
                 a = self.cache_container.get(target_key)
                 if a:
                     return a
