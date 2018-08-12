@@ -13,7 +13,7 @@ pip install redis_decorator
 
 #### Initialize
 ```python
-from redis_decorator import Cache
+from redis_dec import Cache
 from redis import StrictRedis
 redis = StrictRedis(decode_responses=True)
 cache = Cache(redis)
@@ -21,6 +21,8 @@ cache = Cache(redis)
 #### Example1 : Cache string return
 
 ```python
+from time import sleep
+from datetime import datetime
 @cache.ttl(300)
 def pseudo_calc():
     sleep(1)
