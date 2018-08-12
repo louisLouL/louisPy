@@ -9,14 +9,9 @@ When it is called the second time, it will return the result from cache.
 #### Initialize
 ```python
 from Cache import Cache
-
-### Comment this section if you don't have redis instance ###
 from redis import StrictRedis
 redis = StrictRedis(decode_responses=True)
 cache = Cache(redis)
-
-###### Comment this section if you are using redis ##########
-# cache = Cache()
 ```
 #### Example1 : Cache string return
 
@@ -70,4 +65,14 @@ def return_a_float(*args, **kwargs):
 
 for i in range(5):
     print(return_a_float())
+```
+
+#### Delete Cache
+```python
+# Delete all caches
+cache.delete_cache()
+# Delete cache by function
+cache.delete_cache(func_json)
+# Delete cache by function and signature
+cache.delete_cache(func_json, 2, b=3) 
 ```
