@@ -6,9 +6,14 @@ Given a function and a combination of args and kwargs, the function will cache r
 When it is called the second time, it will return the result from cache.
 
 ### Quick start
+#### Install
+```bash
+pip install redis_decorator
+```
+
 #### Initialize
 ```python
-from Cache import Cache
+from redis_decorator import Cache
 from redis import StrictRedis
 redis = StrictRedis(decode_responses=True)
 cache = Cache(redis)
@@ -16,14 +21,12 @@ cache = Cache(redis)
 #### Example1 : Cache string return
 
 ```python
-# set cache's time to live to 300 seconds (expires in 300 seconds)
 @cache.ttl(300)
 def pseudo_calc():
     sleep(1)
     print("Computation in progress")
     return str(datetime.now())
 
-# The first call takes 1 seconds, after that every call is immediately returned from cache.
 for i in range(10):
     print(pseudo_calc())
 ```
@@ -31,6 +34,7 @@ for i in range(10):
 ```python
 # Set cache's time to live to 300 seconds (expires in 300 seconds)
 # If left blank, e.g. @cache.df(), cache will stay forever. Don't recommended.
+import pandas as pd
 @cache.df(300)
 def return_a_df(*args, **kwargs):
     sleep(1)
@@ -69,10 +73,10 @@ for i in range(5):
 
 #### Delete Cache
 ```python
+# Delete cache by function and signature
+cache.delete_cache(return_a_float, 2, b=3) 
+# Delete cache by function
+cache.delete_cache(return_a_float)
 # Delete all caches
 cache.delete_cache()
-# Delete cache by function
-cache.delete_cache(func_json)
-# Delete cache by function and signature
-cache.delete_cache(func_json, 2, b=3) 
 ```

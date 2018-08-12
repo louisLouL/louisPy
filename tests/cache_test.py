@@ -1,8 +1,7 @@
-from datetime import datetime
 from redis import StrictRedis
 from random import random, randint
 import pandas as pd
-from cache import Cache
+from redis_dec import Cache
 import json
 
 

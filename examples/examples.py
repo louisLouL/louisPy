@@ -3,7 +3,7 @@ from time import sleep
 from redis import StrictRedis
 from random import random
 import pandas as pd
-from cache import Cache
+from redis_dec import Cache
 
 ### Comment this section if you don't have redis instance ###
 redis = StrictRedis(decode_responses=True)
@@ -27,7 +27,7 @@ def another():
     return "hello"
 
 
-# Example: cache pandas Dataframe
+# Example: redis_dec pandas Dataframe
 
 @cache.df(120)
 def return_a_df(*args, **kwargs):
@@ -39,7 +39,7 @@ def return_a_df(*args, **kwargs):
 for i in range(5):
     print(return_a_df(1, 5))
 
-# Example: cache dict
+# Example: redis_dec dict
 
 @cache.dict(60)
 def return_a_dict(*args, **kwargs):
@@ -52,7 +52,7 @@ for i in range(5):
     print(return_a_dict())
 
 
-# Example: cache float number
+# Example: redis_dec float number
 
 
 @cache.float(60)
