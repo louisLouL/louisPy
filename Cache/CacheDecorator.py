@@ -3,6 +3,7 @@ import pandas as pd
 import json
 import warnings
 from Cache.SimpleContainer import SimpleContainer
+import functools
 
 
 class Cache:
@@ -20,6 +21,7 @@ class Cache:
 
     def ttl(self, ttl=None):
         def enable(func):
+            @functools.wraps(func)
             def func_wrapper(*args, **kwargs):
                 target_key = ":".join(
                     ["Cache", str(":".join([func.__name__, *[str(i) for i in args], str(kwargs)]))])
@@ -36,21 +38,17 @@ class Cache:
         return enable
 
     def _ser_df(self, func):
-        name = func.__name__
-
+        @functools.wraps(func)
         def func_wrapper(*args, **kwargs):
             return func(*args, **kwargs).to_csv(index=False)
 
-        func_wrapper.__name__ = name
         return func_wrapper
 
     def _de_ser_df(self, func):
-        name = func.__name__
-
+        @functools.wraps(func)
         def func_wrapper(*args, **kwargs):
             return pd.read_csv(StringIO(func(*args, **kwargs)))
 
-        func_wrapper.__name__ = name
         return func_wrapper
 
     def df(self, ttl=None):
@@ -62,33 +60,29 @@ class Cache:
         return deco
 
     def _ser_number(self, func):
-        name = func.__name__
-
+        @functools.wraps(func)
         def func_wrapper(*args, **kwargs):
             return str(func(*args, **kwargs))
 
-        func_wrapper.__name__ = name
         return func_wrapper
 
     def _de_ser_int(self, func):
-        name = func.__name__
-
+        @functools.wraps(func)
         def func_wrapper(*args, **kwargs):
             return int(func(*args, **kwargs))
 
-        func_wrapper.__name__ = name
         return func_wrapper
 
     def _de_ser_float(self, func):
-        name = func.__name__
 
+        @functools.wraps(func)
         def func_wrapper(*args, **kwargs):
             return float(func(*args, **kwargs))
 
-        func_wrapper.__name__ = name
         return func_wrapper
 
     def int(self, ttl=None):
+
         def deco(func):
             for dec in [self._ser_number, self.ttl(ttl), self._de_ser_int]:
                 func = dec(func)
@@ -105,21 +99,17 @@ class Cache:
         return deco
 
     def _ser_dict(self, func):
-        name = func.__name__
-
+        @functools.wraps(func)
         def func_wrapper(*args, **kwargs):
             return json.dumps(func(*args, **kwargs))
 
-        func_wrapper.__name__ = name
         return func_wrapper
 
     def _de_ser_dict(self, func):
-        name = func.__name__
-
+        @functools.wraps(func)
         def func_wrapper(*args, **kwargs):
             return json.loads(func(*args, **kwargs))
 
-        func_wrapper.__name__ = name
         return func_wrapper
 
     def dict(self, ttl=None):
@@ -139,21 +129,17 @@ class Cache:
         return deco
 
     def _de_ser_json(self, func):
-        name = func.__name__
-
+        @functools.wraps(func)
         def func_wrapper(*args, **kwargs):
             return json.loads(func(*args, **kwargs))
 
-        func_wrapper.__name__ = name
         return func_wrapper
 
     def _ser_json(self, func):
-        name = func.__name__
-
+        @functools.wraps(func)
         def func_wrapper(*args, **kwargs):
             return json.dumps(json.loads(func(*args, **kwargs)))
 
-        func_wrapper.__name__ = name
         return func_wrapper
 
     def json(self, ttl=None):
