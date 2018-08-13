@@ -1,24 +1,20 @@
-# louisPy
-A collection of handy python utilities developed by myself over time.
-## CacheDecorator
-Given a function and a combination of args and kwargs, the function will cache result into redis or simple dictionary(if you don't have redis instance)
-
-When it is called the second time, it will return the result from cache.
-
-### Quick start
-#### Install
+## Quick start
+### Install
 ```bash
 pip install redis_decorator
 ```
 
-#### Initialize
+### Initialize
 ```python
 from redis_dec import Cache
 from redis import StrictRedis
 redis = StrictRedis(decode_responses=True)
 cache = Cache(redis)
 ```
-#### Example1 : Cache string return
+## Examples
+Make sure you have redis up and running.(https://redis.io/)
+
+### Example1 : Cache string return
 
 ```python
 from time import sleep
