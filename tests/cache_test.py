@@ -4,7 +4,6 @@ import pandas as pd
 from redis_dec import Cache
 import json
 
-
 redis = StrictRedis(decode_responses=True)
 cache = Cache(redis)
 cache_time = 3600
@@ -39,7 +38,7 @@ def func_df(a, b=0.0):
     a = [a] * rows
     b = [b] * rows
     tmp = [random() for _ in range(rows)]
-    return pd.DataFrame({"a": a, "b": b, "foo": tmp})
+    return pd.DataFrame({"a": a, "b": b, "foo": tmp}).set_index("a")
 
 
 def test_df():
@@ -73,6 +72,7 @@ def test_dict():
     assert func_dict(1, 2) == prev
     assert func_dict(1, 3) != prev
 
+
 @cache.json(cache_time)
 def func_json(a, b=0):
     return json.dumps({
@@ -81,10 +81,12 @@ def func_json(a, b=0):
         "foo": random()
     })
 
+
 def test_json():
     prev = func_json(1, 2)
     assert func_json(1, 2) == prev
     assert func_json(1, 3) != prev
+
 
 def test_delete_single_cache():
     prev = func_json(2, b=3)
@@ -92,14 +94,18 @@ def test_delete_single_cache():
     cache.delete_cache(func_json, 2, b=3)
     assert func_json(2, b=3) != prev
 
+
 def test_delete_cache_by_func():
     prev = func_json(2, b=3)
     assert func_json(2, b=3) == prev
     cache.delete_cache(func_json)
     assert func_json(2, b=3) != prev
 
+
 def test_delete_all_cache():
     prev = func_json(2, b=3)
     assert func_json(2, b=3) == prev
     cache.delete_cache()
     assert func_json(2, b=3) != prev
+
+

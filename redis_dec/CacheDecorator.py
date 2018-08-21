@@ -50,14 +50,15 @@ class Cache:
     def _ser_df(self, func):
         @functools.wraps(func)
         def func_wrapper(*args, **kwargs):
-            return func(*args, **kwargs).to_csv(index=False)
+            return func(*args, **kwargs).to_csv()
 
         return func_wrapper
 
     def _de_ser_df(self, func):
         @functools.wraps(func)
         def func_wrapper(*args, **kwargs):
-            return pd.read_csv(StringIO(func(*args, **kwargs)))
+            tmp = pd.read_csv(StringIO(func(*args, **kwargs)))
+            return tmp.set_index(tmp.columns[0])
 
         return func_wrapper
 
